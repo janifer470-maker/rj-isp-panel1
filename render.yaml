@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: rj-isp-panel
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: rj-isp-db
+          property: connectionString
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: ADMIN_PASSWORD_HASH
+        sync: false
+      - key: WHATSAPP_TOKEN
+        sync: false
+      - key: WHATSAPP_PHONE_NUMBER_ID
+        sync: false
+      - key: WHATSAPP_TEMPLATE_NAME
+        value: isp_expiry_reminder
+      - key: WHATSAPP_LANGUAGE_CODE
+        value: en_US
+      - key: REMINDER_CRON
+        value: "0 9 * * *"
+databases:
+  - name: rj-isp-db
+    plan: free
